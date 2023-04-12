@@ -20,10 +20,12 @@
  * Instantiate the corresponding subclass, ex. SchemeTonalSpot, to create
  * colors corresponding to the theme.
  */
-enum Variant {
+export enum Variant {
   MONOCHROME,
   NEUTRAL,
   TONAL_SPOT,
   VIBRANT,
-  EXPRESSIVE
+  EXPRESSIVE,
+  FIDELITY,
+  CONTENT,
 }

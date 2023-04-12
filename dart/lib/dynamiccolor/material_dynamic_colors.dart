@@ -13,16 +13,21 @@
 // limitations under the License.
 
 import 'dart:math' as math;
+
 import 'package:material_color_utilities/dislike/dislike_analyzer.dart';
-import 'package:material_color_utilities/dynamiccolor/dynamic_color.dart';
-import 'package:material_color_utilities/dynamiccolor/tone_delta_constraint.dart';
 import 'package:material_color_utilities/hct/hct.dart';
 import 'package:material_color_utilities/hct/viewing_conditions.dart';
 import 'package:material_color_utilities/scheme/dynamic_scheme.dart';
 import 'package:material_color_utilities/scheme/variant.dart';
 
+import 'dynamic_color.dart';
+import 'src/tone_delta_constraint.dart';
+
 bool _isFidelity(DynamicScheme scheme) =>
     scheme.variant == Variant.fidelity || scheme.variant == Variant.content;
+
+bool _isMonochrome(DynamicScheme scheme) =>
+    scheme.variant == Variant.monochrome;
 
 /// Tokens, or named colors, in the Material Design system.
 class MaterialDynamicColors {
@@ -143,7 +148,12 @@ class MaterialDynamicColors {
 
   static DynamicColor primary = DynamicColor.fromPalette(
     palette: (s) => s.primaryPalette,
-    tone: (s) => s.isDark ? 80 : 40,
+    tone: (s) {
+      if (_isMonochrome(s)) {
+        return s.isDark ? 100 : 0;
+      }
+      return s.isDark ? 80 : 40;
+    },
     background: (s) => highestSurface(s),
     toneDeltaConstraint: (s) => ToneDeltaConstraint(
       delta: contentAccentToneDelta,
@@ -154,7 +164,12 @@ class MaterialDynamicColors {
 
   static DynamicColor onPrimary = DynamicColor.fromPalette(
     palette: (s) => s.primaryPalette,
-    tone: (s) => s.isDark ? 20 : 100,
+    tone: (s) {
+      if (_isMonochrome(s)) {
+        return s.isDark ? 10 : 90;
+      }
+      return s.isDark ? 20 : 100;
+    },
     background: (s) => primary,
   );
 
@@ -162,10 +177,13 @@ class MaterialDynamicColors {
     palette: (s) => s.primaryPalette,
     background: (s) => highestSurface(s),
     tone: (s) {
-      if (!_isFidelity(s)) {
-        return s.isDark ? 30 : 90;
+      if (_isFidelity(s)) {
+        return _performAlbers(s.sourceColorHct, s);
       }
-      return _performAlbers(s.sourceColorHct, s);
+      if (_isMonochrome(s)) {
+        return s.isDark ? 85 : 25;
+      }
+      return s.isDark ? 30 : 90;
     },
   );
 
@@ -173,10 +191,13 @@ class MaterialDynamicColors {
     palette: (s) => s.primaryPalette,
     background: (s) => primaryContainer,
     tone: (s) {
-      if (!_isFidelity(s)) {
-        return s.isDark ? 90 : 10;
+      if (_isFidelity(s)) {
+        return DynamicColor.foregroundTone(primaryContainer.tone(s), 4.5);
       }
-      return DynamicColor.foregroundTone(primaryContainer.tone(s), 4.5);
+      if (_isMonochrome(s)) {
+        return s.isDark ? 0 : 100;
+      }
+      return s.isDark ? 90 : 10;
     },
   );
 
@@ -205,7 +226,13 @@ class MaterialDynamicColors {
 
   static DynamicColor onSecondary = DynamicColor.fromPalette(
     palette: (s) => s.secondaryPalette,
-    tone: (s) => s.isDark ? 20 : 100,
+    tone: (s) {
+      if (_isMonochrome(s)) {
+        return s.isDark ? 10 : 100;
+      } else {
+        return s.isDark ? 20 : 100;
+      }
+    },
     background: (s) => secondary,
   );
 
@@ -213,6 +240,9 @@ class MaterialDynamicColors {
     palette: (s) => s.secondaryPalette,
     background: (s) => highestSurface(s),
     tone: (s) {
+      if (_isMonochrome(s)) {
+        return s.isDark ? 30 : 85;
+      }
       final initialTone = s.isDark ? 30.0 : 90.0;
       if (!_isFidelity(s)) {
         return initialTone;
@@ -237,7 +267,12 @@ class MaterialDynamicColors {
 
   static DynamicColor tertiary = DynamicColor.fromPalette(
     palette: (s) => s.tertiaryPalette,
-    tone: (s) => s.isDark ? 80 : 40,
+    tone: (s) {
+      if (_isMonochrome(s)) {
+        return s.isDark ? 90 : 25;
+      }
+      return s.isDark ? 80 : 40;
+    },
     background: (s) => highestSurface(s),
     toneDeltaConstraint: (s) => ToneDeltaConstraint(
       delta: contentAccentToneDelta,
@@ -248,7 +283,12 @@ class MaterialDynamicColors {
 
   static DynamicColor onTertiary = DynamicColor.fromPalette(
     palette: (s) => s.tertiaryPalette,
-    tone: (s) => s.isDark ? 20 : 100,
+    tone: (s) {
+      if (_isMonochrome(s)) {
+        return s.isDark ? 10 : 90;
+      }
+      return s.isDark ? 20 : 100;
+    },
     background: (s) => tertiary,
   );
 
@@ -256,6 +296,9 @@ class MaterialDynamicColors {
     palette: (s) => s.tertiaryPalette,
     background: (s) => highestSurface(s),
     tone: (s) {
+      if (_isMonochrome(s)) {
+        return s.isDark ? 60 : 49;
+      }
       if (!_isFidelity(s)) {
         return s.isDark ? 30 : 90;
       }
@@ -271,6 +314,9 @@ class MaterialDynamicColors {
     palette: (s) => s.tertiaryPalette,
     background: (s) => tertiaryContainer,
     tone: (s) {
+      if (_isMonochrome(s)) {
+        return s.isDark ? 0 : 100;
+      }
       if (!_isFidelity(s)) {
         return s.isDark ? 90 : 10;
       }

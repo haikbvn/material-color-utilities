@@ -13,12 +13,14 @@
 // limitations under the License.
 
 import 'dart:math' as math;
+
 import 'package:material_color_utilities/contrast/contrast.dart';
-import 'package:material_color_utilities/dynamiccolor/tone_delta_constraint.dart';
 import 'package:material_color_utilities/hct/hct.dart';
 import 'package:material_color_utilities/palettes/tonal_palette.dart';
 import 'package:material_color_utilities/scheme/dynamic_scheme.dart';
 import 'package:material_color_utilities/utils/math_utils.dart';
+
+import 'src/tone_delta_constraint.dart';
 
 /// A color that adjusts itself based on UI state provided by [DynamicScheme].
 ///
@@ -184,22 +186,18 @@ class DynamicColor {
     double? minRatio;
     double? maxRatio;
     if (bg != null) {
-      final bgHasBg = bg.background(scheme) == null;
+      final bgHasBg = bg.background(scheme) != null;
       standardRatio = Contrast.ratioOfTones(tone(scheme), bg.tone(scheme));
       if (decreasingContrast) {
         final minContrastRatio = Contrast.ratioOfTones(
             toneMinContrast(scheme), bg.toneMinContrast(scheme));
-        minRatio = bgHasBg ? null : minContrastRatio;
+        minRatio = bgHasBg ? minContrastRatio : null;
         maxRatio = standardRatio;
       } else {
         final maxContrastRatio = Contrast.ratioOfTones(
             toneMaxContrast(scheme), bg.toneMaxContrast(scheme));
-        minRatio = bg.background(scheme) == null
-            ? null
-            : math.min(maxContrastRatio, standardRatio);
-        maxRatio = bg.background(scheme) == null
-            ? null
-            : math.max(maxContrastRatio, standardRatio);
+        minRatio = bgHasBg ? math.min(maxContrastRatio, standardRatio) : null;
+        maxRatio = bgHasBg ? math.max(maxContrastRatio, standardRatio) : null;
       }
     }
 
@@ -460,15 +458,18 @@ class DynamicColor {
     return tone;
   }
 
-  /// Returns whether [tone] is <= 60.
+  /// Returns whether [tone] prefers a light foreground.
   ///
   /// People prefer white foregrounds on ~T60-70. Observed over time, and also
   /// by Andrew Somers during research for APCA.
   ///
   /// T60 used as to create the smallest discontinuity possible when skipping
   /// down to T49 in order to ensure light foregrounds.
+  ///
+  /// Since `tertiaryContainer` in dark monochrome scheme requires a tone of
+  /// 60, it should not be adjusted. Therefore, 60 is excluded here.
   static bool tonePrefersLightForeground(double tone) {
-    return tone.round() <= 60;
+    return tone.round() < 60;
   }
 
   /// Returns whether [tone] can reach a contrast ratio of 4.5 with a lighter

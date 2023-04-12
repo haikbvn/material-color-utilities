@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {Hct} from '../hct/hct';
+import {Hct} from '../hct/hct.js';
 
 /**
  *  A convenience class for retrieving colors that are constant in hue and
@@ -42,8 +42,7 @@ export class TonalPalette {
     return new TonalPalette(hue, chroma);
   }
 
-  private constructor(
-      private readonly hue: number, private readonly chroma: number) {}
+  private constructor(readonly hue: number, readonly chroma: number) {}
 
   /**
    * @param tone HCT tone, measured from 0 to 100.
@@ -56,5 +55,13 @@ export class TonalPalette {
       this.cache.set(tone, argb);
     }
     return argb;
+  }
+
+  /**
+   * @param tone HCT tone.
+   * @return HCT representation of a color with that tone.
+   */
+  getHct(tone: number): Hct {
+    return Hct.fromInt(this.tone(tone));
   }
 }

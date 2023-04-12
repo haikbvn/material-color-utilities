@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:math' as math;
-
 import 'package:material_color_utilities/hct/hct.dart';
 
 /// Check and/or fix universally disliked colors.
@@ -29,14 +27,9 @@ class DislikeAnalyzer {
   ///
   /// Disliked is defined as a dark yellow-green that is not neutral.
   static bool isDisliked(Hct hct) {
-    const hueStart = 90.0;
-    const hueEnd = 111.0;
-    const chromaStart = 16.0;
-    const toneStart = 65.0;
-
-    final huePasses = hct.hue.round() >= hueStart && hct.hue.round() <= hueEnd;
-    final chromaPasses = hct.chroma.round() > chromaStart;
-    final tonePasses = hct.tone.round() < toneStart;
+    final huePasses = hct.hue.round() >= 90.0 && hct.hue.round() <= 111.0;
+    final chromaPasses = hct.chroma.round() > 16.0;
+    final tonePasses = hct.tone.round() < 65.0;
 
     return huePasses && chromaPasses && tonePasses;
   }
@@ -47,7 +40,7 @@ class DislikeAnalyzer {
       return Hct.from(
         hct.hue,
         hct.chroma,
-        math.max(hct.tone, 70.0),
+        70.0,
       );
     }
 
