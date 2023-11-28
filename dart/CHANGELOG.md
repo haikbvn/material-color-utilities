@@ -1,3 +1,59 @@
+## 0.9.0 - 2023-11-06
+### Added
+- Added getters for `DynamicScheme`.
+
+### Changed
+- Moved `DynamicScheme` from `scheme/` to `dynamiccolor/`.
+
+## 0.8.0 - 2023-06-22
+### Added
+- Add fruit salad color scheme
+- Add rainbow color scheme
+
+## 0.7.0 - 2023-06-13
+### Changed
+- Updated `DynamicColor` so that it conforms to the new contrast requirements.
+    - API for `DynamicColor` modified.
+
+## 0.6.0 - 2023-05-31
+### Added
+- Add key color to tonal palette.
+- Add key colors to the Material dynamic colors:
+    - `primaryPaletteKeyColor`
+    - `secondaryPaletteKeyColor`
+    - `tertiaryPaletteKeyColor`
+    - `neutralPaletteKeyColor`
+    - `neutralVariantPaletteKeyColor`
+
+### Changed
+- Scheme updates to align with recent Android Sys UI changes:
+    - `SchemeExpressive`:
+        - Primary hue + 240 from 120
+        - Neutral hue + 15
+        - Neutral variant hue + 15
+    - `SchemeTonalSpot`:
+        - Primary chroma = 36 from 40
+    - `SchemeVibrant`:
+        - Neutral chroma = 10 from 8
+
+### Fixed
+- Fixed outline when in dark mode to be tone 60.
+
+## 0.5.0 - 2023-05-02
+### Removed
+- Removed `inverseOnPrimary`, an unfounded dynamic color
+
+## 0.4.0 - 2023-04-28
+### Added
+- Add `label` and `description` to each `Variant`
+- Add `xFixed` Material dynamic colors
+
+### Changed
+- Update monochrome scheme to new spec
+
+## Fixed
+- Fix `inverseSurface` tone value
+
 ## 0.3.0 - 2023-03-10
 ### Added
 

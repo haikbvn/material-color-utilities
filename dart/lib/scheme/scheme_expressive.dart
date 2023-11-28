@@ -11,11 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import 'package:material_color_utilities/dynamiccolor/dynamic_scheme.dart';
+import 'package:material_color_utilities/dynamiccolor/variant.dart';
 import 'package:material_color_utilities/hct/hct.dart';
 import 'package:material_color_utilities/palettes/tonal_palette.dart';
 import 'package:material_color_utilities/utils/math_utils.dart';
-import 'dynamic_scheme.dart';
-import 'variant.dart';
 
 /// A Dynamic Color theme that is intentionally detached from the input color.
 class SchemeExpressive extends DynamicScheme {
@@ -59,7 +59,7 @@ class SchemeExpressive extends DynamicScheme {
           sourceColorArgb: sourceColorHct.toInt(),
           variant: Variant.expressive,
           primaryPalette: TonalPalette.of(
-            MathUtils.sanitizeDegreesDouble(sourceColorHct.hue + 120.0),
+            MathUtils.sanitizeDegreesDouble(sourceColorHct.hue + 240.0),
             40.0,
           ),
           secondaryPalette: TonalPalette.of(
@@ -72,7 +72,8 @@ class SchemeExpressive extends DynamicScheme {
                 sourceColorHct, hues, tertiaryRotations),
             32.0,
           ),
-          neutralPalette: TonalPalette.of(sourceColorHct.hue, 8.0),
-          neutralVariantPalette: TonalPalette.of(sourceColorHct.hue, 12.0),
+          neutralPalette: TonalPalette.of(sourceColorHct.hue + 15.0, 8.0),
+          neutralVariantPalette:
+              TonalPalette.of(sourceColorHct.hue + 15.0, 12.0),
         );
 }

@@ -1,6 +1,6 @@
 {
   "name": "@material/material-color-utilities",
-  "version": "0.2.4",
+  "version": "0.2.7",
   "publishConfig": {
     "access": "public"
   },
@@ -38,7 +38,8 @@
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "import": "./index.js"
+      "import": "./index.js",
+      "default": "./index.js"
     }
   },
   "scripts": {
